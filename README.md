@@ -1,3 +1,222 @@
+# Truck Signs App 🚀
+
+## A modern, containerized App built with Django, designed to be deployed via Docker.
+
+---
+
+## Introduction
+
+This full-stack application provides a backend service for managing users, contacts, tasks, and subtasks in a Kanban-style project board. The system uses PostgreSQL as the database and is ready to be deployed via Docker with a custom `.env` configuration.
+
+---
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Quickstart](#quickstart)
+3. [Usage](#usage)
+4. [Environment Variables](#environment-variables)
+5. [Requirements](#requirements)
+6. [Contact](#contact)
+
+---
+
+## Quickstart
+
+1. **Install dependencies:**
+   ```sh
+   sudo apt update && sudo apt install -y docker.io docker-compose git
+   ```
+2. **Clone the repository:**
+   ```sh
+   git clone -b development git@github.com:BenjaminTietz/truck_signs_api.git
+   cd truck_signs_api
+   ```
+3. **Generate and configure the .env file:** <br>
+   The environment file will be created automatically from env.template.
+   Adjust the values to match your setup:
+```sh
+bash create_env.sh
+```
+4. **Build the Docker image:**
+   ```sh
+   docker build -t trucksigns-app .
+   ```
+5. **Create Dockernetwork** 
+```
+docker network create trucks-net
+```
+
+6. **Start the database container:**
+   ```sh
+   docker run -d \
+  --name db \
+  --network trucks-net \
+  -e POSTGRES_DB=trucksigns_db \
+  -e POSTGRES_USER=trucksigns_user \
+  -e POSTGRES_PASSWORD=supertrucksignsuser! \
+  postgres
+   ```
+
+7. **Start the app container:**
+   ```sh
+docker run -d \
+  --name web \
+  --network trucks-net \
+  -p 8020:8020 \
+  -v $(pwd)/.env:/app/.env:ro \
+  trucksigns-app
+   ```
+
+8. **Log in to the admin panel:**
+   ```sh
+   http://<your-server-ip>:8020/admin
+   ```
+
+---
+
+## Usage
+
+### **Environment Variables**
+
+The application uses environment variables to configure certain aspects of the system. These can be set in the `.env` file:
+
+```sh
+SECRET_KEY=
+DOCKER_SECRET_KEY=
+
+CLOUD_NAME=
+CLOUD_API_KEY=
+CLOUD_API_SECRET=
+
+DB_NAME=
+DB_USER=
+DB_PASSWORD=!
+DB_HOST=
+DB_PORT=
+
+
+DOCKER_DB_NAME=
+DOCKER_DB_USER=
+DOCKER_DB_PASSWORD=
+DOCKER_DB_HOST=
+DOCKER_DB_PORT=
+
+
+STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+
+DOCKER_STRIPE_PUBLISHABLE_KEY=
+DOCKER_STRIPE_SECRET_KEY=
+DOCKER_EMAIL_HOST_USER=
+DOCKER_EMAIL_HOST_PASSWORD=
+```
+
+### **Managing the Database**
+
+Run migrations manually inside the container if needed:
+
+```sh
+docker exec -it baby-tools-container python manage.py migrate
+```
+
+To create a new Django superuser manually:
+
+```sh
+docker exec -it baby-tools-container python manage.py createsuperuser
+```
+
+### **Collecting Static Files**
+
+If you update static files and need to collect them again, run:
+
+```sh
+docker exec -it baby-tools-container python manage.py collectstatic --noinput
+```
+
+### **Stopping and Restarting the Container**
+
+To stop the container:
+
+```sh
+docker stop baby-tools-container
+```
+
+To restart it:
+
+```sh
+docker start baby-tools-container
+```
+
+To remove the container completely:
+
+```sh
+docker rm baby-tools-container
+```
+
+To rebuild and restart:
+
+```sh
+docker build -t baby-tools-shop .
+docker run -d -p 8025:8025 --env-file .env --name baby-tools-container baby-tools-shop
+```
+
+---
+
+## Requirements
+
+- A V-Server running Ubuntu/Debian
+- Docker & Docker Compose
+- Git
+
+Ensure your system is up to date:
+
+```sh
+sudo apt update && sudo apt install -y docker.io docker-compose git
+```
+
+---
+
+
+## Contact
+
+### 👤 Personal
+
+- [Portfolio](https://benjamin-tietz.com/)
+- [Drop me a mail](mailto:mail@benjamin-tietz.com)
+
+### 🌍 Social
+
+- [LinkedIn](https://www.linkedin.com/in/benjamin-tietz/)
+
+### 💻 Project Repository
+
+- [GitHub Repository](https://github.com/BenjaminTietz/truck_signs_api)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div align="center">
 
 ![Truck Signs](./screenshots/Truck_Signs_logo.png)
