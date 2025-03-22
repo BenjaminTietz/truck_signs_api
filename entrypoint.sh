@@ -13,19 +13,21 @@ python manage.py collectstatic --noinput
 python manage.py makemigrations
 python manage.py migrate
 
-# Create superuser if it doesn't exist
 echo "Creating superuser if not exists..."
-python manage.py shell << END
-from django.contrib.auth import get_user_model
-User = get_user_model()
-if not User.objects.filter(username="${DJANGO_SUPERUSER_USERNAME}").exists():
-    User.objects.create_superuser(
-        "${DJANGO_SUPERUSER_USERNAME}",
-        "${DJANGO_SUPERUSER_EMAIL}",
-        "${DJANGO_SUPERUSER_PASSWORD}"
-    )
-END
 
+python manage.py shell -c "
+from django.contrib.auth import get_user_model;
+import os;
+User = get_user_model();
+username = os.environ.get('DJANGO_SUPERUSER_USERNAME');
+email = os.environ.get('DJANGO_SUPERUSER_EMAIL');
+password = os.environ.get('DJANGO_SUPERUSER_PASSWORD');
+if username and not User.objects.filter(username=username).exists():
+    User.objects.create_superuser(username, email, password)
+    print('Superuser created');
+else:
+    print('Superuser already exists or username is missing');
+"
 
 
 echo "Postgresql migrations finished – starting Gunicorn..."
