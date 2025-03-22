@@ -18,6 +18,7 @@ This full-stack application provides a backend service for managing a truck sign
 4. [Environment Variables](#environment-variables)
 5. [Requirements](#requirements)
 6. [Contact](#contact)
+7. [Checklist](checklist.pdf)
 
 ---
 
@@ -50,23 +51,23 @@ This full-stack application provides a backend service for managing a truck sign
 
 6. **Start the database container:**
    ```sh
-   docker run -d \
-     --name db \
-     --network trucks-net \
-     -e POSTGRES_DB=trucksigns_db \
-     -e POSTGRES_USER=trucksigns_user \
-     -e POSTGRES_PASSWORD=supertrucksignsuser! \
-     postgres
+    docker run -d \
+    --name db \
+    --network trucks-net \
+    --env-file .env \
+    --restart unless-stopped \
+    postgres
    ```
 
 7. **Start the app container:**
    ```sh
-   docker run -d \
-     --name web \
-     --network trucks-net \
-     -p 8020:8020 \
-     -v $(pwd)/.env:/app/.env:ro \
-     trucksigns-app
+    docker run -d \
+    --name web \
+    --network trucks-net \
+    -p 8020:8020 \
+    -v $(pwd)/.env:/app/.env:ro \
+    --restart unless-stopped \
+    trucksigns-app
    ```
 
 8. **Log in to the admin panel:**
