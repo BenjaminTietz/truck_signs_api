@@ -6,7 +6,7 @@
 
 ## Introduction
 
-This full-stack application provides a backend service for managing users, contacts, tasks, and subtasks in a Kanban-style project board. The system uses PostgreSQL as the database and is ready to be deployed via Docker with a custom `.env` configuration.
+This full-stack application provides a backend service for managing a truck signs webshop. The system uses PostgreSQL as the database and is ready to be deployed via Docker with a custom `.env` configuration.
 
 ---
 
@@ -35,37 +35,38 @@ This full-stack application provides a backend service for managing users, conta
 3. **Generate and configure the .env file:** <br>
    The environment file will be created automatically from env.template.
    Adjust the values to match your setup:
-```sh
-bash create_env.sh
-```
+   ```sh
+   bash create_env.sh
+   nano .env
+   ```
 4. **Build the Docker image:**
    ```sh
    docker build -t trucksigns-app .
    ```
 5. **Create Dockernetwork** 
-```
-docker network create trucks-net
-```
+   ```sh
+   docker network create trucks-net
+   ```
 
 6. **Start the database container:**
    ```sh
    docker run -d \
-  --name db \
-  --network trucks-net \
-  -e POSTGRES_DB=trucksigns_db \
-  -e POSTGRES_USER=trucksigns_user \
-  -e POSTGRES_PASSWORD=supertrucksignsuser! \
-  postgres
+     --name db \
+     --network trucks-net \
+     -e POSTGRES_DB=trucksigns_db \
+     -e POSTGRES_USER=trucksigns_user \
+     -e POSTGRES_PASSWORD=supertrucksignsuser! \
+     postgres
    ```
 
 7. **Start the app container:**
    ```sh
-docker run -d \
-  --name web \
-  --network trucks-net \
-  -p 8020:8020 \
-  -v $(pwd)/.env:/app/.env:ro \
-  trucksigns-app
+   docker run -d \
+     --name web \
+     --network trucks-net \
+     -p 8020:8020 \
+     -v $(pwd)/.env:/app/.env:ro \
+     trucksigns-app
    ```
 
 8. **Log in to the admin panel:**
@@ -81,28 +82,52 @@ docker run -d \
 
 The application uses environment variables to configure certain aspects of the system. These can be set in the `.env` file:
 
-```sh
+```ini
+# ======================
+# Core Django
+# ======================
 SECRET_KEY=
 DOCKER_SECRET_KEY=
+DEBUG=False
+DJANGO_SETTINGS_MODULE_MODE=production
 
+ALLOWED_HOSTS=127.0.0.1,0.0.0.0,<your-server-ip-or-domain>
+
+# ======================
+# Cloudinary
+# ======================
 CLOUD_NAME=
 CLOUD_API_KEY=
 CLOUD_API_SECRET=
 
+# ======================
+# Local DB (optional)
+# ======================
 DB_NAME=
 DB_USER=
-DB_PASSWORD=!
+DB_PASSWORD=
 DB_HOST=
 DB_PORT=
 
-
+# ======================
+# Docker/Postgres DB
+# ======================
 DOCKER_DB_NAME=
 DOCKER_DB_USER=
 DOCKER_DB_PASSWORD=
 DOCKER_DB_HOST=
 DOCKER_DB_PORT=
 
+# ======================
+# Superuser auto-setup
+# ======================
+DJANGO_SUPERUSER_USERNAME=
+DJANGO_SUPERUSER_PASSWORD=
+DJANGO_SUPERUSER_EMAIL=
 
+# ======================
+# Stripe (optional)
+# ======================
 STRIPE_PUBLISHABLE_KEY=
 STRIPE_SECRET_KEY=
 EMAIL_HOST_USER=
@@ -112,6 +137,12 @@ DOCKER_STRIPE_PUBLISHABLE_KEY=
 DOCKER_STRIPE_SECRET_KEY=
 DOCKER_EMAIL_HOST_USER=
 DOCKER_EMAIL_HOST_PASSWORD=
+
+# ======================
+# Optional: Admin Dashboard / Mail Routing
+# ======================
+CURRENT_ADMIN_DOMAIN=
+EMAIL_ADMIN=
 ```
 
 ### **Managing the Database**
@@ -119,13 +150,13 @@ DOCKER_EMAIL_HOST_PASSWORD=
 Run migrations manually inside the container if needed:
 
 ```sh
-docker exec -it baby-tools-container python manage.py migrate
+docker exec -it web python manage.py migrate
 ```
 
 To create a new Django superuser manually:
 
 ```sh
-docker exec -it baby-tools-container python manage.py createsuperuser
+docker exec -it web python manage.py createsuperuser
 ```
 
 ### **Collecting Static Files**
@@ -133,7 +164,7 @@ docker exec -it baby-tools-container python manage.py createsuperuser
 If you update static files and need to collect them again, run:
 
 ```sh
-docker exec -it baby-tools-container python manage.py collectstatic --noinput
+docker exec -it web python manage.py collectstatic --noinput
 ```
 
 ### **Stopping and Restarting the Container**
@@ -141,26 +172,31 @@ docker exec -it baby-tools-container python manage.py collectstatic --noinput
 To stop the container:
 
 ```sh
-docker stop baby-tools-container
+docker stop web
 ```
 
 To restart it:
 
 ```sh
-docker start baby-tools-container
+docker start web
 ```
 
 To remove the container completely:
 
 ```sh
-docker rm baby-tools-container
+docker rm web
 ```
 
 To rebuild and restart:
 
 ```sh
-docker build -t baby-tools-shop .
-docker run -d -p 8025:8025 --env-file .env --name baby-tools-container baby-tools-shop
+docker build -t trucksigns-app .
+docker run -d \
+  --name web \
+  --network trucks-net \
+  -p 8020:8020 \
+  -v $(pwd)/.env:/app/.env:ro \
+  trucksigns-app
 ```
 
 ---
@@ -179,7 +215,6 @@ sudo apt update && sudo apt install -y docker.io docker-compose git
 
 ---
 
-
 ## Contact
 
 ### 👤 Personal
@@ -194,8 +229,6 @@ sudo apt update && sudo apt install -y docker.io docker-compose git
 ### 💻 Project Repository
 
 - [GitHub Repository](https://github.com/BenjaminTietz/truck_signs_api)
-
-
 
 
 
