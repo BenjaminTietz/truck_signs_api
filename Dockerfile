@@ -20,5 +20,10 @@ RUN chmod +x entrypoint.sh
 # Expose port 8020 so the application can be accessed externally
 EXPOSE 8020
 
+ENV DJANGO_SUPERUSER_USERNAME="admin"
+ENV DJANGO_SUPERUSER_EMAIL="admin@admin.com"
+ENV DJANGO_SUPERUSER_PASSWORD="adminpw"
+ENV ALLOWED_HOSTS="*"
+
 # Use entrypoint.sh as the startup command
 ENTRYPOINT ["./entrypoint.sh"]
