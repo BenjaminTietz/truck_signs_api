@@ -21,7 +21,6 @@ COPY . .
 # Install dependencies
 RUN python -m pip install --no-cache-dir -r requirements.txt
 
-
 # copy the entrypoint.sh and set permissions 
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
