@@ -52,7 +52,6 @@ sudo apt update && sudo apt install -y docker.io docker-compose git
    Adjust the values to match your setup:
    ```sh
    bash create_env.sh
-   nano .env
    ```
 4. **Build the Docker image:**
    ```sh
@@ -78,13 +77,17 @@ sudo apt update && sudo apt install -y docker.io docker-compose git
 7. **Start the app container:**
 
    ```sh
-    docker run -d \
-    --name web \
-    --network trucks-net \
-    -p 8020:8020 \
-    -v $(pwd)/.env:/app/.env:ro \
-    --restart unless-stopped \
-    trucksigns-app
+   docker run -d \
+   --name web \
+   --network trucks-net \
+   -p 8020:8020 \
+   -v $(pwd)/.env:/app/.env:ro \
+   --restart unless-stopped \
+   -e DJANGO_SUPERUSER_USERNAME=admin \
+   -e DJANGO_SUPERUSER_EMAIL=admin@admin.com \
+   -e DJANGO_SUPERUSER_PASSWORD=adminpw \
+   -e ALLOWED_HOSTS="*" \
+   trucksigns-app
    ```
 
 8. **Log in to the admin panel:**
