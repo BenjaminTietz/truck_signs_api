@@ -2,6 +2,16 @@
 
 ## A modern, containerized App built with Django, designed to be deployed via Docker.
 
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Prerequisites](#prerequisites)
+3. [Quickstart](#quickstart)
+4. [Usage](#usage)
+5. [Environment Variables](#environment-variables)
+6. [Contact](#contact)
+7. [Checklist](checklist.pdf)
+
 ---
 
 ## Introduction
@@ -10,15 +20,19 @@ This full-stack application provides a backend service for managing a truck sign
 
 ---
 
-## Table of Contents
+---
 
-1. [Introduction](#introduction)
-2. [Quickstart](#quickstart)
-3. [Usage](#usage)
-4. [Environment Variables](#environment-variables)
-5. [Requirements](#requirements)
-6. [Contact](#contact)
-7. [Checklist](checklist.pdf)
+## Prerequisites
+
+- A V-Server running Ubuntu/Debian
+- Docker & Docker Compose
+- Git
+
+Ensure your system is up to date:
+
+```sh
+sudo apt update && sudo apt install -y docker.io docker-compose git
+```
 
 ---
 
@@ -140,20 +154,6 @@ docker run -d \
   -p 8020:8020 \
   -v $(pwd)/.env:/app/.env:ro \
   trucksigns-app
-```
-
----
-
-## Requirements
-
-- A V-Server running Ubuntu/Debian
-- Docker & Docker Compose
-- Git
-
-Ensure your system is up to date:
-
-```sh
-sudo apt update && sudo apt install -y docker.io docker-compose git
 ```
 
 ---
