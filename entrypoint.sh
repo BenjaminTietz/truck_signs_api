@@ -2,7 +2,7 @@
 set -e
 
 echo "Waiting for postgres to connect ..."
-# wait fpr postgreQGL Service contrainder: db Port : 5432
+# wait for postgreQGL Service container: db Port : 5432
 while ! nc -z db 5432; do
   sleep 0.1
 done
