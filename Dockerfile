@@ -1,19 +1,11 @@
-# Use a minimal Python 3 image as the base image
-FROM python:3.11-slim
+# Use a Python 3.8.1 image as the base image
+FROM python:3.8.1
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install system dependencies for packages like Pillow, cffi, psycopg2 etc.
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libffi-dev \
-    libpq-dev \
-    zlib1g-dev \
-    libjpeg-dev \
-    build-essential \
-    netcat-openbsd \
-    && rm -rf /var/lib/apt/lists/*
+# Install system dependencies
+RUN apt-get update && apt-get install -y netcat && apt-get clean
 
 # Copy project file into the container
 COPY . .
