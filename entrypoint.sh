@@ -15,7 +15,7 @@ python manage.py migrate
 
 echo "Creating superuser..."
 
-python manage.py createsuperuser --noinput
+python manage.py createsuperuser --noinput || true
 
 echo "Postgresql migrations finished – starting Gunicorn..."
 # start gunicorn on port 8020
