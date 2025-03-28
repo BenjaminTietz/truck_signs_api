@@ -15,7 +15,10 @@ python manage.py migrate
 
 echo "Creating superuser..."
 
-python manage.py createsuperuser --noinput || true
+python manage.py createsuperuser \
+      --noinput \
+      --username "$DJANGO_SUPERUSER_USERNAME" \
+      --email "$DJANGO_SUPERUSER_EMAIL" 
 
 echo "Postgresql migrations finished – starting Gunicorn..."
 # start gunicorn on port 8020
