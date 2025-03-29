@@ -75,12 +75,15 @@ sudo apt update && sudo apt install -y docker.io
    ```
 7. **Start the app container:(optional adujust values to match your setup)**
    ```sh
-   docker run -d \
-    --name web \
-    --network trucks-net \
-    -p 8020:8020 \
-    --env-file .env \
-    trucksigns-app
+docker run -d \
+  --name web \
+  --network trucks-net \
+  -p 8020:8020 \
+  --env-file .env \
+  -e ALLOWED_HOSTS=<your_ip> \
+  --restart unless-stopped \
+  trucksigns-app
+
    ```
 8. **Log in to the admin panel:**
    ```sh
