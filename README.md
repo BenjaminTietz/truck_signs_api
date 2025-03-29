@@ -16,7 +16,7 @@
 
 ## Introduction
 
-This full-stack application provides a backend service for managing a truck signs webshop. The system uses PostgreSQL as the database and is ready to be deployed via Docker with a custom `.env` configuration.
+This full-stack application provides a backend service for managing a truck signs webshop. The system uses PostgreSQL as the database and is ready to be deployed via Docker with a custom (optional) `.env` configuration.
 
 ---
 
@@ -25,15 +25,13 @@ This full-stack application provides a backend service for managing a truck sign
 ## Prerequisites
 
 - A V-Server running Ubuntu/Debian
-- Docker & Docker Compose
-- Git
+- Docker 
 
 Ensure your system is up to date:
 
 ```sh
-sudo apt update && sudo apt install -y docker.io docker-compose git
+sudo apt update && sudo apt install -y docker.io
 ```
-
 ---
 
 ## Quickstart
@@ -44,52 +42,46 @@ sudo apt update && sudo apt install -y docker.io docker-compose git
    ```
 2. **Clone the repository:**
    ```sh
-   git clone -b development git@github.com:BenjaminTietz/truck_signs_api.git
+   git clone git@github.com:BenjaminTietz/truck_signs_api.git
    cd truck_signs_api
    ```
 3. **Generate and configure the .env file:** <br>
    The environment file will be created automatically from env.template.
-   Adjust the values to match your setup:
+   Adjust the values to match your setup (optional):
    ```sh
-   bash create_env.sh
+   cp truck_signs_designs/settings/simple_env_config.env .env
+   nano .env (optional)
    ```
 4. **Build the Docker image:**
    ```sh
    docker build -t trucksigns-app .
    ```
 5. **Create Dockernetwork**
-
    ```sh
    docker network create trucks-net
    ```
-
-6. **Start the database container:**
-
-   ```sh
-    docker run -d \
-    --name db \
-    --network trucks-net \
-    --env-file .env \
-    --restart unless-stopped \
-    postgres
-   ```
-
-7. **Start the app container:**
-
+6. **Start the database container: (optional adjust values to match your setup)**
    ```sh
    docker run -d \
-   --name web \
+   --name db \
    --network trucks-net \
-   -p 8020:8020 \
-   -v $(pwd)/.env:/app/.env:ro \
+   -p 5432:5432 \
+   -e POSTGRES_DB=trucksigns_db \
+   -e POSTGRES_USER=trucksigns_user \
+   -e POSTGRES_PASSWORD=supertrucksignsuser! \
    --restart unless-stopped \
-   -e DJANGO_SUPERUSER_USERNAME=admin \
-   -e DJANGO_SUPERUSER_EMAIL=admin@admin.com \
-   -e DJANGO_SUPERUSER_PASSWORD=adminpw \
-   -e ALLOWED_HOSTS="*" \
-   trucksigns-app
+   -v trucksigns_pg_data:/var/lib/postgresql/data \
+   postgres
    ```
-
+7. **Start the app container:(optional adujust values to match your setup)**
+   ```sh
+   docker run -d \
+    --name web \
+    --network trucks-net \
+    -p 8020:8020 \
+    --env-file .env \
+    trucksigns-app
+   ```
 8. **Log in to the admin panel:**
    ```sh
    http://<your-server-ip>:8020/admin
