@@ -25,13 +25,14 @@ This full-stack application provides a backend service for managing a truck sign
 ## Prerequisites
 
 - A V-Server running Ubuntu/Debian
-- Docker 
+- Docker
 
 Ensure your system is up to date:
 
 ```sh
 sudo apt update && sudo apt install -y docker.io
 ```
+
 ---
 
 ## Quickstart
@@ -61,6 +62,7 @@ sudo apt update && sudo apt install -y docker.io
    docker network create trucks-net
    ```
 6. **Start the database container: (optional adjust values to match your setup)**
+
    ```sh
    docker run -d \
    --name db \
@@ -73,6 +75,10 @@ sudo apt update && sudo apt install -y docker.io
    -v trucksigns_pg_data:/var/lib/postgresql/data \
    postgres
    ```
+
+   💡 On your local development machine, you can add -p 5432:5432 if needed (e.g., for DBeaver).
+   ❗ On a public server, do not expose port 5432 to the internet!
+
 7. **Start the app container:(optional adujust values to match your setup)**
    ```sh
    docker run -d \
